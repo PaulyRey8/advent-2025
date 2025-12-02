@@ -2,8 +2,7 @@ package one
 
 fun main() {
     Dial(
-        DialMovementListFromFile("input.txt"),
-        ClackRecorder(),
-        50
-    )()
+        position = 50,
+        dialRotationStrategy = DialRotationStrategy.RecordOnZeroCrossover
+    ).turn(DialMovementsSupplier.FromFile("input.txt")())
 }

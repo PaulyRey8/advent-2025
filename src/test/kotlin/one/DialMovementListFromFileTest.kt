@@ -1,35 +1,38 @@
 package one
 
 import io.kotest.matchers.shouldBe
+import one.Dial.Movement
+import one.Dial.Movement.Direction.LEFT
+import one.Dial.Movement.Direction.RIGHT
 import org.junit.jupiter.api.Test
 
 class DialMovementListFromFileTest {
 
     @Test
     fun `Dial instructions from empty file`() {
-        DialMovementListFromFile("emptyFile.txt")() shouldBe emptyList()
+        DialMovementsSupplier.FromFile("emptyFile.txt")() shouldBe emptyList()
     }
 
     @Test
     fun `Dial instructions from file with single line`() {
-        DialMovementListFromFile("oneMovement.txt")() shouldBe listOf(
-            DialMovement(68, Direction.LEFT)
+        DialMovementsSupplier.FromFile("oneMovement.txt")() shouldBe listOf(
+            Movement(68, LEFT)
         )
     }
 
     @Test
     fun `Dial instructions from file with multiple lines`() {
-        DialMovementListFromFile("multipleMovements.txt")() shouldBe listOf(
-            DialMovement(68, Direction.LEFT),
-            DialMovement(30, Direction.LEFT),
-            DialMovement(48, Direction.RIGHT),
-            DialMovement(5, Direction.LEFT),
-            DialMovement(60, Direction.RIGHT),
-            DialMovement(55, Direction.LEFT),
-            DialMovement(1, Direction.LEFT),
-            DialMovement(99, Direction.LEFT),
-            DialMovement(14, Direction.RIGHT),
-            DialMovement(82, Direction.LEFT),
+        DialMovementsSupplier.FromFile("multipleMovements.txt")() shouldBe listOf(
+            Movement(68, LEFT),
+            Movement(30, LEFT),
+            Movement(48, RIGHT),
+            Movement(5, LEFT),
+            Movement(60, RIGHT),
+            Movement(55, LEFT),
+            Movement(1, LEFT),
+            Movement(99, LEFT),
+            Movement(14, RIGHT),
+            Movement(82, LEFT),
         )
     }
 }

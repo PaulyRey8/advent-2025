@@ -1,41 +1,43 @@
 package one
 
 class Dial(
-    private val instructions: DialMovementListSupplier,
-    private val clackRecorder: ClackRecorder,
-    private var position: Int = 0
+    private val clackRecorder: ClackRecorder = ClackRecorder(),
+    internal var position: Int = 0,
+    private val dialRotationStrategy: DialRotationStrategy = DialRotationStrategy.RecordOnZero
 ) {
-    private val notches: List<DialSound> = (0..MAX_DIAL_VALUE).map {
+    internal val notches: List<DialSound> = (0..MAX_DIAL_VALUE).map {
         when (it) {
             0 -> DialSound.Clack(clackRecorder)
             else -> DialSound.Click
         }
     }.toList()
 
+    val clacks get() = clackRecorder.count
+
     init {
         println("START position = $position")
     }
 
-    private fun DialMovement.rotate() {
-        position = when (direction) {
-            Direction.RIGHT -> (position + clicks).mod(MAX_DIAL_VALUE)
-            Direction.LEFT -> (position - clicks).mod(MAX_DIAL_VALUE)
-        }
-
-        println("MOVE position = $position")
-
-        notches[position]()
-    }
-
-    operator fun invoke() {
-        instructions().forEach { instruction ->
-            instruction.rotate()
+    fun turn(movements: DialMovements) {
+        movements.forEach {
+            dialRotationStrategy.rotate(it)
         }
     }
 
-    fun currentPosition() = position
+    internal companion object {
+        const val MAX_DIAL_VALUE = 100
+    }
 
-    private companion object {
-        private const val MAX_DIAL_VALUE = 100
+    class Movement(
+        val clicks: Int,
+        val direction: Direction,
+    ) {
+        init {
+            require(clicks > 0)
+        }
+
+        enum class Direction {
+            RIGHT, LEFT
+        }
     }
 }

@@ -1,8 +1,8 @@
 package one
 
-sealed interface DialSound {
+sealed interface DialSound : () -> Unit {
 
-    operator fun invoke() = Unit
+    override operator fun invoke() = Unit
 
     object Click : DialSound
 
