@@ -1,6 +1,7 @@
 package one
 
 import io.kotest.matchers.shouldBe
+import one.DialMovementListFromList.Companion.dialMovementListOf
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -10,7 +11,7 @@ class DialTest {
     @Test
     fun `dial records zero on no movement`() {
         val clackRecorder = ClackRecorder()
-        Dial(listOf(), clackRecorder)()
+        Dial(dialMovementListOf(), clackRecorder)()
 
         clackRecorder.count shouldBe 0
     }
@@ -18,7 +19,7 @@ class DialTest {
     @Test
     fun `dial position can be set on init`() {
         val clackRecorder = ClackRecorder()
-        val dial = Dial(listOf(), clackRecorder, 25)
+        val dial = Dial(dialMovementListOf(), clackRecorder, 25)
 
         dial()
 
@@ -29,7 +30,7 @@ class DialTest {
     @EnumSource(Direction::class)
     fun `dial records one clack on full rotation`(direction: Direction) {
         val clackRecorder = ClackRecorder()
-        Dial(listOf(DialMovement(100, direction)), clackRecorder)()
+        Dial(dialMovementListOf(DialMovement(100, direction)), clackRecorder)()
 
         clackRecorder.count shouldBe 1
     }
@@ -38,7 +39,7 @@ class DialTest {
     @EnumSource(Direction::class)
     fun `overlapping turn does not record one clack when it doesnt end on zero`(direction: Direction) {
         val clackRecorder = ClackRecorder()
-        Dial(listOf(DialMovement(150, direction)), clackRecorder)()
+        Dial(dialMovementListOf(DialMovement(150, direction)), clackRecorder)()
 
         clackRecorder.count shouldBe 0
     }
@@ -47,7 +48,7 @@ class DialTest {
     fun `overlapping turn does record one clack when it does stop on zero during movement`() {
         val clackRecorder = ClackRecorder()
         Dial(
-            listOf(
+            dialMovementListOf(
                 DialMovement(150, Direction.RIGHT),
                 DialMovement(50, Direction.LEFT),
                 DialMovement(101, Direction.LEFT),
@@ -61,7 +62,7 @@ class DialTest {
     fun `full movement instructions result in correct clacks`() {
         val clackRecorder = ClackRecorder()
         Dial(
-            listOf(
+            dialMovementListOf(
                 DialMovement(68, Direction.LEFT),
                 DialMovement(30, Direction.LEFT),
                 DialMovement(48, Direction.RIGHT),

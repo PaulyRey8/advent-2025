@@ -1,7 +1,7 @@
 package one
 
 class Dial(
-    private val instructions: List<DialMovement>,
+    private val instructions: DialMovementListSupplier,
     private val clackRecorder: ClackRecorder,
     private var position: Int = 0
 ) {
@@ -28,7 +28,7 @@ class Dial(
     }
 
     operator fun invoke() {
-        instructions.forEach { instruction ->
+        instructions().forEach { instruction ->
             instruction.rotate()
         }
     }
