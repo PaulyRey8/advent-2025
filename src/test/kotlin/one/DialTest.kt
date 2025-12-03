@@ -23,7 +23,7 @@ class DialTest {
     fun `dial position can be set on init`() {
         with(Dial(position = 25)) {
             turn(dialMovements())
-            position shouldBe 25
+            getPosition() shouldBe 25
         }
     }
 
